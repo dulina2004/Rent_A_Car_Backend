@@ -4,7 +4,6 @@ import edu.icet.dto.SignUpRequest;
 import edu.icet.dto.User;
 import edu.icet.services.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
