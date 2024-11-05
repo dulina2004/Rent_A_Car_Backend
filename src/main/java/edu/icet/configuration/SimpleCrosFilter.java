@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Component
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SimpleCrosFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -23,8 +23,8 @@ public class SimpleCrosFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin",originHeader);
         response.setHeader("Access-Control-Allow-Methods","POST,GET,PUT,OPTIONS,DELETE");
         response.setHeader("Access-Control-Max-Age","3600");
-        //response.setHeader("Access-Control-Allow-Header","*");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
+        response.setHeader("Access-Control-Allow-Header","*");
+        //response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
 
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())){

@@ -1,4 +1,4 @@
-package edu.icet.services;
+package edu.icet.service;
 import edu.icet.dto.SignUpRequest;
 import edu.icet.dto.User;
 
