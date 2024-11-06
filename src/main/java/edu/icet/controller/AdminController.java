@@ -26,4 +26,19 @@ public class AdminController {
         }
 
     }
+    @GetMapping("/cars")
+    public ResponseEntity<?>getAllCars(){
+        //System.out.println(ResponseEntity.ok(adminService.getAllCars()));
+        return ResponseEntity.ok(adminService.getAllCars());
+    }
+    @DeleteMapping("/car/{id}")
+    public ResponseEntity<Void> deleteCar(@PathVariable Long id){
+        adminService.deleteCar(id);
+        return ResponseEntity.ok(null);
+    }
+    @GetMapping("/car/{id}")
+    public ResponseEntity<Car>getCarById(@PathVariable Long id){
+        Car car =adminService.getCarById(id);
+        return ResponseEntity.ok(car);
+    }
 }

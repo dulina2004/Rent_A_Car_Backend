@@ -7,6 +7,10 @@ import edu.icet.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
@@ -31,5 +35,21 @@ public class AdminServiceImpl implements AdminService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public List<Car> getAllCars() {
+        return carRepository.findAll().stream().map(CarEntity::getCar).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteCar(Long id) {
+        carRepository.deleteById(id);
+    }
+
+    @Override
+    public Car getCarById(Long id) {
+        Optional<CarEntity> optionalCar = carRepository.findById(id);
+        return optionalCar.map(CarEntity::getCar).orElse(null);
     }
 }
