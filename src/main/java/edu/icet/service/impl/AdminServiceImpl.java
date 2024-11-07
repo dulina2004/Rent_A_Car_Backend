@@ -52,4 +52,32 @@ public class AdminServiceImpl implements AdminService {
         Optional<CarEntity> optionalCar = carRepository.findById(id);
         return optionalCar.map(CarEntity::getCar).orElse(null);
     }
+
+    @Override
+    public boolean updateCar(Long carId, Car car){
+        Optional<CarEntity> optionalCar = carRepository.findById(carId);
+        if (optionalCar.isPresent()){
+            CarEntity existingCar =optionalCar.get();
+            try {
+                if (car.getImage()!=null)
+                    existingCar.setImage(car.getImage().getBytes());
+            } catch (Exception e) {
+                System.out.println("imge not set");
+            }
+
+            existingCar.setPrice(car.getPrice());
+            existingCar.setYear(car.getYear());
+            existingCar.setType(car.getType());
+            existingCar.setDescription(car.getDescription());
+            existingCar.setTransmission(car.getTransmission());
+            existingCar.setColour(car.getColour());
+            existingCar.setName(car.getName());
+            existingCar.setBrand(car.getBrand());
+
+            carRepository.save(existingCar);
+            return true;
+        }
+        return false;
+
+    }
 }
