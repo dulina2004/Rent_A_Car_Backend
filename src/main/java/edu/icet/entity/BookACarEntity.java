@@ -1,9 +1,11 @@
 package edu.icet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.icet.dto.BookACar;
 import edu.icet.util.BookCarStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -11,6 +13,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@ToString
 public class BookACarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +34,20 @@ public class BookACarEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private CarEntity car;
+
+    public BookACar getBookACar(){
+        BookACar bookACar=new BookACar();
+        bookACar.setId(id);
+        bookACar.setDays(days);
+        bookACar.setBookCarStatus(bookCarStatus);
+        bookACar.setPrice(price);
+        bookACar.setToDate(toDate);
+        bookACar.setFromDate(fromDate);
+        bookACar.setEmail(user.getEmail());
+        bookACar.setUsername(user.getName());
+        bookACar.setUserId(user.getId());
+        bookACar.setCarId(car.getId());
+        return bookACar;
+    }
 
 }

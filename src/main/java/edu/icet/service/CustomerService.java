@@ -11,4 +11,7 @@ public interface CustomerService {
     boolean bookACar(BookACar bookACar);
 
     Car getCarById(Long id);
+
+    List<BookACar> getBookingByUserId(Long user);
+
 }

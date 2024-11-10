@@ -1,10 +1,18 @@
 package edu.icet.service.impl;
 
+import edu.icet.dto.BookACar;
 import edu.icet.dto.Car;
+import edu.icet.dto.CarDtoList;
+import edu.icet.dto.SearchCar;
+import edu.icet.entity.BookACarEntity;
 import edu.icet.entity.CarEntity;
+import edu.icet.repository.BookACarRepository;
 import edu.icet.repository.CarRepository;
 import edu.icet.service.AdminService;
+import edu.icet.util.BookCarStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +24,7 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     private final CarRepository carRepository;
+    private final BookACarRepository bookACarRepository;
 
     @Override
     public boolean postCar(Car car) {
@@ -78,6 +87,49 @@ public class AdminServiceImpl implements AdminService {
             return true;
         }
         return false;
+    }
 
+    @Override
+    public List<BookACar> getBookings() {
+        return bookACarRepository.findAll().stream().map(BookACarEntity::getBookACar).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean changeBookingStatus(Long bookingId, String status) {
+        System.out.println(bookingId+"  "+status);
+        Optional<BookACarEntity>optionalBookACarEntity =bookACarRepository.findById(bookingId);
+        if (optionalBookACarEntity.isPresent()){
+            BookACarEntity existingBookACar = optionalBookACarEntity.get();
+            if (status.equals("Approve")){
+                existingBookACar.setBookCarStatus(BookCarStatus.APPROVED);
+            }else {
+                existingBookACar.setBookCarStatus(BookCarStatus.REJECTED);
+            }
+            bookACarRepository.save(existingBookACar);
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public CarDtoList searchCar(SearchCar searchCar) {
+        CarEntity carEntity=new CarEntity();
+        carEntity.setBrand(searchCar.getBrand());
+        carEntity.setType(searchCar.getType());
+        carEntity.setTransmission(searchCar.getTransmission());
+        carEntity.setColour(searchCar.getColour());
+        ExampleMatcher exampleMatcher=
+                ExampleMatcher.matchingAll()
+                        .withMatcher("brand",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("type",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("transmission",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("colour",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withIgnorePaths("id");
+        Example<CarEntity> carExample=Example.of(carEntity,exampleMatcher);
+        List<CarEntity> carlist=carRepository.findAll(carExample);
+        CarDtoList carDtoList=new CarDtoList();
+        carDtoList.setCarDtoList(carlist.stream().map(CarEntity::getCar).collect(Collectors.toList()));
+        return carDtoList;
     }
 }
