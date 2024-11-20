@@ -7,6 +7,7 @@ import edu.icet.dto.User;
 import edu.icet.entity.UserEntity;
 import edu.icet.repository.UserRepository;
 import edu.icet.service.AuthService;
+import edu.icet.service.EmailService;
 import edu.icet.service.UserService;
 import edu.icet.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class AuthController {
     private final UserService userService;
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<?>signupCustomer(@RequestBody SignUpRequest signUpRequest){
@@ -42,6 +44,11 @@ public class AuthController {
         User createdCustomer =authService.createCustomer(signUpRequest);
         if (createdCustomer==null)return new ResponseEntity<>
             ("Customer not created, Come again", HttpStatus.BAD_REQUEST);
+        try {
+            emailService.sendAccountCreatedEmail(signUpRequest.getEmail(), signUpRequest.getName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return new ResponseEntity<>(createdCustomer,HttpStatus.CREATED);
     }
 
