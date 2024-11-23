@@ -1,6 +1,4 @@
 package edu.icet.controller;
-
-
 import edu.icet.dto.BookACar;
 import edu.icet.dto.Car;
 import edu.icet.dto.SearchCar;
@@ -9,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
